@@ -21,8 +21,8 @@ Ejecuta el script con Python:
 python portscanner.py
 ```
 
-Luego, ingresa la dirección IP que deseas escanear. El programa verificará si la IP es válida y comenzará el escaneo de puertos desde el 1 al 10000.
+Luego, ingresa la dirección IP que deseas escanear.
+
 
 ## Estado del proyecto
-
 Este proyecto está en desarrollo y puede mejorar en futuras versiones. Sugerencias y contribuciones son bienvenidas.
