@@ -10,7 +10,7 @@ def scan_ports(target, port):
         sock.settimeout(3)  
         result = sock.connect_ex((target, port))
         if result == 0:
-            print(Fore.GREEN + f"PORT {port} : OPEN" + Style.RESET_ALL)
+            print(Fore.GREEN + f"PORT {port} : OPEN - " + socket.getservbyport(port, "tcp") +  Style.RESET_ALL)
         sock.close()
     except socket.error:
         pass
@@ -31,9 +31,15 @@ while(verificated == False):
         print("Scanning Ports...")
         verificated = True
     else:
-        print("Invalid IP. Try Again.")
-        target = input(Fore.RED + 'Whats ip do u want scan: ' + Fore.WHITE) #  Actualizo la ip y sus partes
-        verify = target.split(".") # -----------
+        try:
+            target = socket.gethostbyname(target)
+            print("Scanning Ports...")
+            verificated = True
+        except socket.gaierror:
+            print("Invalid IP. Try Again.")
+            target = input(Fore.RED + 'Whats ip do u want scan: ' + Fore.WHITE) #  Actualizo la ip y sus partes
+            verify = target.split(".") # -----------
+
 
 
 threads = []
