@@ -6,6 +6,7 @@ from colorama import Fore, Back, Style
 import pyfiglet
 import platform
 import re
+import datetime
 
 
 
@@ -35,32 +36,34 @@ def detect_system(target):
             ttl = int(ttl_match.group(1))
 
             if ttl > 64:  
-                return "Sistema Windows"
+                return "Windows System"
             elif ttl <= 64:  
-                return "Sistema Unix/Linux/MacOs/FreeBSD"
+                return "Unix/Linux/MacOs/FreeBSD System"
             elif ttl >= 200:  
-                return "Router Cisco/Solaris/AIX"
+                return "Cisco Router/Solaris/AIX"
             else:
-                return "Sistema desconocido"
+                return "Unknown System"
 
-        return Fore.RED + "Sistema Operativo: No se pudo detectar" + Fore.RESET
+        return Fore.RED + "Operating System: Could not detect" + Fore.RESET
 
     except (subprocess.CalledProcessError, ValueError, FileNotFoundError):
         return "Error al hacer ping"
 
 def Make_Log():
+    now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     with open("logs.txt", "w") as archivo:
+        archivo.write(f"Log generated : {now}\n")
         archivo.write("Target: " + target + " - " + detect_system(target))
         archivo.write("\nOpen ports: \n")
         for port in ports:
-            archivo.write(" - Port Open: " + str(port) + " - " +  socket.getservbyport(port, "tcp") + "\n")
-        archivo.write("*"*50+ "\n")
+            archivo.write(" - Open Port: " + str(port) + " - " +  socket.getservbyport(port, "tcp") + "\n")
+        archivo.write("\n" + "*"*50+ "\n")
 
 print("\n\n\n\n\n\n\n\n\n")
 print(Fore.CYAN + pyfiglet.figlet_format('PortScanner'))
 print(Fore.LIGHTBLACK_EX + pyfiglet.figlet_format('Made by Konra'))
 
-target = input(Fore.RED + 'Whats ip/url do u want scan: ' + Fore.WHITE)
+target = input(Fore.RED + 'What IP/URL would you like to scan: ' + Fore.WHITE)
 verify = target.split(".")
 verificated = False
 ports = []
@@ -77,7 +80,7 @@ while(verificated == False):
             verificated = True
         except socket.gaierror:
             print("Invalid IP. Try Again.")
-            target = input(Fore.RED + 'Whats ip do u want scan: ' + Fore.WHITE) #  Actualizo la ip y sus partes
+            target = input(Fore.RED + 'What IP would you like to scan: ' + Fore.WHITE) #  Actualizo la ip y sus partes
             verify = target.split(".") # -----------
 
 
@@ -94,7 +97,7 @@ for thread in threads:
 
 
 print(Fore.LIGHTGREEN_EX + detect_system(target) + Fore.RESET)
-log = input(Fore.RED + 'Make a log? Y/N: ' + Fore.WHITE)
+log = input(Fore.RED + 'Would you like to save a log? Y/N: ' + Fore.WHITE)
 if(log == 'Y'):
     Make_Log()
 else:
