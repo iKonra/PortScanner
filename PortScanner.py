@@ -1,7 +1,10 @@
 import socket
 import threading
+import os
+import subprocess
 from colorama import Fore, Back, Style
 import pyfiglet
+from scapy.all import IP, TCP, sr1
 
 
 def scan_ports(target, port):
@@ -15,13 +18,11 @@ def scan_ports(target, port):
     except socket.error:
         pass
 
-
-
 print("\n\n\n\n\n\n\n\n\n")
 print(Fore.CYAN + pyfiglet.figlet_format('PortScanner'))
 print(Fore.LIGHTBLACK_EX + pyfiglet.figlet_format('Made by Konra'))
 
-target = input(Fore.RED + 'Whats ip do u want scan: ' + Fore.WHITE)
+target = input(Fore.RED + 'Whats ip/url do u want scan: ' + Fore.WHITE)
 verify = target.split(".")
 verificated = False
 
@@ -33,7 +34,7 @@ while(verificated == False):
     else:
         try:
             target = socket.gethostbyname(target)
-            print("Scanning Ports...")
+            print("Scanning Ports of " + target)
             verificated = True
         except socket.gaierror:
             print("Invalid IP. Try Again.")
@@ -51,5 +52,6 @@ for port in range(1, 10001):
 
 for thread in threads:
     thread.join()
+
 
 print(Fore.CYAN + "Scan complete!" + Style.RESET_ALL)
