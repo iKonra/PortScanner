@@ -29,4 +29,4 @@ Este proyecto está en desarrollo y puede mejorar en futuras versiones. Sugerenc
 
 ## Features
 - Registro en txt
-- Deteccion de OS
+
