@@ -28,5 +28,5 @@ Luego, ingresa la dirección IP que deseas escanear.
 Este proyecto está en desarrollo y puede mejorar en futuras versiones. Sugerencias y contribuciones son bienvenidas.
 
 ## Features
-- Deteccion de versiones y servicios
-- Escaneo de urls
+- Registro en txt
+- Deteccion de OS
