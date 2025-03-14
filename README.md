@@ -21,7 +21,7 @@ Ejecuta el script con Python:
 python portscanner.py
 ```
 
-Luego, ingresa la dirección IP que deseas escanear.
+Luego, ingresa la dirección IP/URL que deseas escanear.
 
 
 ## Estado del proyecto
