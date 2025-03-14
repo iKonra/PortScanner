@@ -4,7 +4,9 @@ import os
 import subprocess
 from colorama import Fore, Back, Style
 import pyfiglet
-from scapy.all import IP, TCP, sr1
+import platform
+import re
+
 
 
 def scan_ports(target, port):
@@ -17,6 +19,34 @@ def scan_ports(target, port):
         sock.close()
     except socket.error:
         pass
+
+def detectar_sistema_operativo(target):
+    comando = ["ping", "-n", "1", target] if platform.system().startswith("Win") else ["ping", "-c", "1", target]
+    # En windows y en otros Os se usa distinto el ping, se usa los parametros -n/-c para indicar que solo queremos 1 paquete para agilizar el envio
+
+    try:
+        salida = subprocess.check_output(comando, universal_newlines=True, stderr=subprocess.DEVNULL)
+        # Salida = Capturamos el outpot del comando, convertimos todo a texto, ignoramos errores
+        ttl_match = re.search(r"TTL=(\d+)", salida, re.IGNORECASE)
+        # Buscamos en la salida del ping un numero despues de "TTL=" (ignorando mayusculas y minusculas)
+
+        if ttl_match:
+            ttl = int(ttl_match.group(1))
+
+            if ttl > 64:  
+                return Fore.LIGHTGREEN_EX + "Sistema Windows"+ Fore.RESET
+            elif ttl <= 64:  
+                return Fore.LIGHTGREEN_EX + "Sistema Unix/Linux/MacOs/FreeBSD" + Fore.RESET
+            elif ttl >= 200:  
+                return Fore.LIGHTGREEN_EX + "Router Cisco/Solaris/AIX" + Fore.RESET
+            else:
+                return Fore.RED + "Sistema desconocido"+ Fore.RESET
+
+        return Fore.RED + "Sistema Operativo: No se pudo detectar" + Fore.RESET
+
+    except (subprocess.CalledProcessError, ValueError, FileNotFoundError):
+        return "Error al hacer ping"
+
 
 print("\n\n\n\n\n\n\n\n\n")
 print(Fore.CYAN + pyfiglet.figlet_format('PortScanner'))
@@ -54,4 +84,5 @@ for thread in threads:
     thread.join()
 
 
+print(detectar_sistema_operativo(target))
 print(Fore.CYAN + "Scan complete!" + Style.RESET_ALL)
